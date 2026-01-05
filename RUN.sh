@@ -3,7 +3,7 @@
 
 [ -d results ] || mkdir results
 
-tol=1e-6
+tol=1e-8
 max_iters=1000000
 
 for ((i=3;i<4;i++));do
