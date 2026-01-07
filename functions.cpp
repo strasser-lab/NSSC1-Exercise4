@@ -17,6 +17,8 @@ int solveJacobi2D_C(const double L
                    ,double* const aux
                    ,std::ofstream& LOG_FILE) {
 
+  // Set the boundary condition
+
    for (int i = 1; i < NX; ++i) {          
 
          
@@ -31,9 +33,10 @@ int solveJacobi2D_C(const double L
    const int N = (NX-1)*(NY-1);
 
    iters = 0;
+
    while (res>TOL) {
          
-      
+    // Calculate the next step and store it in aux[]
       for (int j=2; j<NY-1; ++j) {
          for (int i=2; i<NX-1; ++i) {
          const int l11 = ij2l(i,j,NX);
@@ -55,7 +58,7 @@ int solveJacobi2D_C(const double L
       }
       res= sqrt(res/N);
 */
-
+      //Compute the residual
       for (int j=2; j<NY-1; ++j) {
          for (int i=2; i<NX-1; ++i) {
          const int l11 = ij2l(i,j,NX);
@@ -69,6 +72,8 @@ int solveJacobi2D_C(const double L
       }
       res /= sqrt(N);
 
+
+      //update sol with the next solution 
       for (int l = 0; l<N;++l) {
          sol[l] = aux[l];
       }
