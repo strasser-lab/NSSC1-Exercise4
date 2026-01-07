@@ -46,14 +46,28 @@ int solveJacobi2D_C(const double L
          }
       }
 
-      // Compute Residual
-      
+
       res = 0.0;            
+      // Compute the diffrence between the current and last solution. Not the residual
+/*      
       for (int l = 0; l<N;++l) {
       res += pow(sol[l]-aux[l],2);
       }
       res= sqrt(res/N);
+*/
 
+      for (int j=2; j<NY-1; ++j) {
+         for (int i=2; i<NX-1; ++i) {
+         const int l11 = ij2l(i,j,NX);
+         const int l01 = ij2l(i,j-1,NX);
+         const int l10 = ij2l(i-1,j,NX);
+         const int l21 = ij2l(i+1,j,NX);
+         const int l12 = ij2l(i,j+1,NX);
+
+         res += abs(aux[l21] + aux[l10] + aux[l12] + aux[l01] - 4*aux[l11]);
+         }
+      }
+      res /= sqrt(N);
 
       for (int l = 0; l<N;++l) {
          sol[l] = aux[l];
