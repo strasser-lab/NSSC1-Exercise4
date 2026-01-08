@@ -19,10 +19,7 @@ $$
 
 This equation can be interpreted as calculating the mean value of the neighbours at that point .
 
-## Residual
+The solutions of the two functions `Jacobi2D_A` and `Jacobi2D_C` match up very closely.
 
-I do not exactly know why he calculated the residual the way he did. I implemented two versions, and both converge:
-
-- summing the absolute value of the error between the old and new solutions;
-
-- calculating the actual residual using the discretised Laplace equation and summing that value.
+![](plots/Jacobi2D_A.png)
+![](plots/Jacobi2D_C.png)
