@@ -27,36 +27,36 @@ static double computeResidualMatrixFree(const double L, const int NX, const int 
     double res = 0.0;
     const int N = (NX-1)*(NY-1);
     
-    // 初始化 aux 為 rhs
+    // Initialize aux as rhs
     for (int l = 0; l < N; ++l) {
         aux[l] = rhs[l];
     }
     
-    // 減去 A*sol
+    // Subtract A*sol
     for (int j = 1; j <= NY-1; ++j) {
         for (int i = 1; i <= NX-1; ++i) {
             const int l = ij2l(i, j, NX);
             double sum = 0.0;
             
-            // 檢查每個鄰居是否存在並計算貢獻
-            // 下鄰居 (i, j-1)
+            // Check each neighbor points is existence and compute contribution
+            // Bottom neighbor point (i, j-1)
             if (j > 1) {
                 const int l_down = ij2l(i, j-1, NX);
                 sum += a10 * sol[l_down];
             }
-            // 左鄰居 (i-1, j)
+            // Left neighbor point (i-1, j)
             if (i > 1) {
                 const int l_left = ij2l(i-1, j, NX);
                 sum += a01 * sol[l_left];
             }
-            // 自身
+            // Self point
             sum += a11 * sol[l];
-            // 右鄰居 (i+1, j)
+            // Right neighbor point (i+1, j)
             if (i < NX-1) {
                 const int l_right = ij2l(i+1, j, NX);
                 sum += a21 * sol[l_right];
             }
-            // 上鄰居 (i, j+1)
+            // Top neighbor point (i, j+1)
             if (j < NY-1) {
                 const int l_up = ij2l(i, j+1, NX);
                 sum += a12 * sol[l_up];
@@ -80,7 +80,7 @@ int solveJacobi2D_C(const double L
                    ,double* const aux
                    ,std::ofstream& LOG_FILE) {
 //
-// 1. 預計算常數
+// 1. Precompute constants
     const double DX = L / static_cast<double>(NX);
     const double DY = L / static_cast<double>(NY);
     const double DXSQ = DX * DX;
@@ -94,65 +94,65 @@ int solveJacobi2D_C(const double L
     
     const int N = (NX-1)*(NY-1);
     
-    // 2. 初始化
+    // 2. Initialization
     res = 2.0 * TOL;
     iters = 0;
     
-    // 3. Jacobi 主迭代迴圈
+    // 3. Jacobi main iteration loop
     while (res > TOL && iters < MAX_ITERS) {
-        // 3.1 更新所有內部點（使用 aux 暫存新解）
+        // 3.1 Update all interior points (use aux to store new solution temporarily)
         for (int j = 1; j <= NY-1; ++j) {
             for (int i = 1; i <= NX-1; ++i) {
                 const int l = ij2l(i, j, NX);
                 double sum = 0.0;
                 
-                // 根據點的位置處理不同數量的鄰居
-                // 這部分優化：可以分為內部區域和邊界區域來避免if判斷
+                // Handle different number of neighbor points based on point location
+                // Optimization：can separate interior and boundary regions to avoid if statements
                 
-                // 下鄰居 (i, j-1)
+                // Bottom neighbor point (i, j-1)
                 if (j > 1) {
                     const int l_down = ij2l(i, j-1, NX);
                     sum += a10 * sol[l_down];
                 }
-                // 左鄰居 (i-1, j)
+                // Left neighbor point (i-1, j)
                 if (i > 1) {
                     const int l_left = ij2l(i-1, j, NX);
                     sum += a01 * sol[l_left];
                 }
-                // 右鄰居 (i+1, j)
+                // Right neighbor point (i+1, j)
                 if (i < NX-1) {
                     const int l_right = ij2l(i+1, j, NX);
                     sum += a21 * sol[l_right];
                 }
-                // 上鄰居 (i, j+1)
+                // Top neighbor point (i, j+1)
                 if (j < NY-1) {
                     const int l_up = ij2l(i, j+1, NX);
                     sum += a12 * sol[l_up];
                 }
                 
-                // Jacobi 更新公式
+                // Jacobi formula update
                 aux[l] = (rhs[l] - sum) / a11;
             }
         }
         
-        // 3.2 複製新解到 sol（同步更新）
+        // 3.2 Copy new solution to sol (synchronous update)
         for (int l = 0; l < N; ++l) {
             sol[l] = aux[l];
         }
         
-        // 3.3 計算殘差
+        // 3.3 Compute residual
         res = computeResidualMatrixFree(L, NX, NY, sol, rhs, aux);
         
-        // 3.4 更新迭代計數器
+        // 3.4 Update iteration counter
         ++iters;
         
-        // 可選：每100次迭代輸出進度
+        // output progress every 1000 iterations
         if (iters % 1000 == 0) {
             LOG_FILE << "  Iteration " << iters << ", residual = " << res << endl;
         }
     }
     
-    // 4. 收斂檢查與輸出
+    // 4. Convergence check and output
     if (res <= TOL) {
 
 
