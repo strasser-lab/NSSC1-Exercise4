@@ -21,7 +21,7 @@ This equation can be interpreted as calculating the mean value of the neighbours
 
 The provided code implements solveJacobi2D_A using Coordinate (COO) format for the sparse matrix. The task is to implement solveJacobi2D_C as a matrix-free version, optimizing for time-to-solution and memory usage. A third variant, solveJacobi2D_B (using Compressed Sparse Row or CSR format), is also present in the code.
 
-All solvers were implemented, compiled with g++ using -std=c++14 -O3, and tested on a grid with $  N_x = N_y = 9  $ (internal points $  N=64  $), tolerance $  TOL=1e-6  $, and max iterations 10000. Solutions from solveJacobi2D_A (Sol_ref.log) and solveJacobi2D_C (Sol.log) match exactly, confirming correctness. Timings and memory were measured using system tools like time and Valgrind.
+All solvers were implemented, compiled with g++ using -std=c++14 -O3, and tested on a grid with $  N_x = N_y = 9  $ (internal points $N=64$), tolerance $TOL=1e-6$, and max iterations 10000. Solutions from solveJacobi2D_A (Sol_ref.log) and solveJacobi2D_C (Sol.log) match exactly, confirming correctness. Timings and memory were measured using system tools like time and Valgrind.
 
 Implementation Details
 
