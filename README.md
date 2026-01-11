@@ -24,7 +24,7 @@ The provided code implements solveJacobi2D_A using Coordinate (COO) format for t
 All solvers were implemented, compiled with g++ using -std=c++14 -O3, and tested on a grid with $  N_x = N_y = 9  $ (internal points $  N=64  $), tolerance $  TOL=1e-6  $, and max iterations 10000. Solutions from solveJacobi2D_A (Sol_ref.log) and solveJacobi2D_C (Sol.log) match exactly, confirming correctness. Timings and memory were measured using system tools like time and Valgrind.
 
 Implementation Details
-```
+
 
 solveJacobi2D_A uses COO format storage (row, col, value) and traverses through non-zeros, which, although generic, has a large overhead due to traversal through a large number of elements.
 
